@@ -1,0 +1,8 @@
+.git
+node_modules
+.DS_*
+.#*
+*.log
+
+/coverage
+/out

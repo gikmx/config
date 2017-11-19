@@ -1,0 +1,39 @@
+{
+    "name": "@gik/config",
+    "version": "0.0.1",
+    "description": "Import configuration from a folder",
+    "license": "MIT",
+    "contributors": [
+        "Héctor Menéndez <etor@gik.mx>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gikmx/config"
+    },
+    "os": [
+        "linux",
+        "darwin"
+    ],
+    "engines": {
+        "node": "^6.11.0",
+        "npm": "^5.4.2"
+    },
+    "directories": {
+        "test": "__tests__",
+        "src": "./src",
+        "out": "./out"
+    },
+    "main": "out/index.js",
+    "scripts": {
+        "test": "gik-npm lint test && gik-npm test",
+        "build": "gik-npm lint src && gik-npm build",
+        "verify": "npm run build -S && npm run test -s",
+        "start": "gik-npm start 'npm run verify -s'",
+        "precommit": "npm run verify -s && gik-npm version patch -s"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@gik/eslint-config-node": "0.0.5",
+        "@gik/npm": "^0.1.13"
+    }
+}
