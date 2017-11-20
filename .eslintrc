@@ -1,3 +1,7 @@
 {
-    "extends": "@gik/node"
+    "extends": "@gik/node",
+    "rules": {
+        "import/no-dynamic-require": "off",
+        "global-require": "off"
+    }
 }

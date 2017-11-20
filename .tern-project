@@ -4,7 +4,8 @@
         "ecmaScript"
     ],
     "loadEagerly": [
-        "./src/**/*.js"
+        "./src/**/*.js",
+        "./node_modules/@gik/**/lib/**/*.js"
     ],
     "plugins": {
         "doc_comment": {},

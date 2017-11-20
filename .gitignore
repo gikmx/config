@@ -1,8 +1,9 @@
 .git
 node_modules
+.tern-port
 .DS_*
 .#*
 *.log
 
 /coverage
-/out
+/lib

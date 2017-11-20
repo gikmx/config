@@ -1,7 +1,7 @@
 {
-    "name": "@gik/config",
-    "version": "0.0.1",
-    "description": "Import configuration from a folder",
+    "name": "@gik/tools-configurator",
+    "version": "0.0.2",
+    "description": "Imports configuration from a folder",
     "license": "MIT",
     "contributors": [
         "Héctor Menéndez <etor@gik.mx>"
@@ -21,17 +21,23 @@
     "directories": {
         "test": "__tests__",
         "src": "./src",
-        "out": "./out"
+        "out": "./lib"
     },
-    "main": "out/index.js",
+    "main": "lib/configurator.js",
     "scripts": {
         "test": "gik-npm lint test && gik-npm test",
         "build": "gik-npm lint src && gik-npm build",
         "verify": "npm run build -S && npm run test -s",
         "start": "gik-npm start 'npm run verify -s'",
+        "pub": "npm run verify -s && npm publish --access public --tag",
         "precommit": "npm run verify -s && gik-npm version patch -s"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@gik/tools-checker": "0.0.11",
+        "@gik/tools-populator": "0.0.5",
+        "@gik/tools-thrower": "^0.1.12",
+        "deepmerge": "^2.0.1"
+    },
     "devDependencies": {
         "@gik/eslint-config-node": "0.0.5",
         "@gik/npm": "^0.1.13"
