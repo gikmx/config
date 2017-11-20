@@ -52,7 +52,7 @@ The result would be:
         aa: 'onetwo',
         ab: 'onetwo-b'
     },
-    b: 'development'
+    b: 'production'
 }
 ```
 

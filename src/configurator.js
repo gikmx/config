@@ -126,7 +126,7 @@ export function Load(config, base) {
  *         aa: 'onetwo',
  *         ab: 'onetwo-b'
  *     },
- *     b: 'development'
+ *     b: 'production'
  * }
  * ```
  * @param {Object} [settings] - Settings to customize behaviour.
