@@ -9,24 +9,27 @@
 - darwin
 
 #### <a name="table-of-contents"></a> Table of contents
-- **[Env](#Env)** `member` Load data from json (compatible) files according to current environment.
+- **[configurator](#configurator)** Load data from json (compatible) files according to current environment.
+  - **[Path](#configurator.Path)** Returns full paths for the directories declard con package.json
+  - **[Env](#configurator.Env)** Returns the current environment.
 
 
-# <a name="Env"></a> Env
-> global  variable
-
+# <a name="configurator"></a> configurator
 
 Load data from json (compatible) files according to current environment.
 when no environment is specified `development` is assumed.
+
+As an added bonus, the contents of `Path` and `Env` will be available to you when
+populating the configuration. Just use the properties `path` and `env` respectively.
 
 ###### Example
 
 Assuming the following directory structure and `process.env.NODE_ENV = 'production'`:
 
 ```
- ⎿ etc
+ └ etc
     ├ default.json -> { "a": { "a1":"one", "a2":"two" , "aa": "${a.a1}${a.a2}"} }
-    ⎿ default-production.json -> { "a": { "ab": "${a.aa}-b" }, "b": true }
+    └ default-production.json -> { "a": { "ab": "${a.aa}-b" }, "b": true }
 ```
 The result would be:
 
@@ -79,6 +82,30 @@ The result would be:
 - `ConfiguratorSettingsPathError` - When settings.path cannot be found.
 - `ConfiguratorFileError` - When a file cannot be loaded.
 - `ConfiguratorParseError` - When an error occurs when loading a file.
+
+###### Members
+
+- [Path](#configurator.Path)
+- [Env](#configurator.Env)
+
+<small>**[▲ Top](#table-of-contents)**</small>
+
+---
+
+## <a name="configurator.Path"></a> Path
+
+Returns full paths for the directories declard con package.json
+
+
+
+<small>**[▲ Top](#table-of-contents)**</small>
+
+---
+
+## <a name="configurator.Env"></a> Env
+
+Returns the current environment.
+
 
 
 <small>**[▲ Top](#table-of-contents)**</small>

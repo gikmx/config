@@ -200,6 +200,8 @@ describe('The exposed Configurator method', () => {
         const { Configurator } = require(pathMain);
         const path = PATH.join(pathCases, 'valid');
         const config = Configurator({ ...settingsValid, path });
+        delete config.env;
+        delete config.path;
         expect(config).toEqual({
             a: {
                 a1: 'one', a2: 'two', aa: 'onetwo', ab: 'onetwo-b',
