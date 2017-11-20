@@ -1,6 +1,6 @@
 {
     "name": "@gik/tools-configurator",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Imports configuration from a folder",
     "license": "MIT",
     "contributors": [
@@ -30,7 +30,7 @@
         "verify": "npm run build -S && npm run test -s",
         "start": "gik-npm start 'npm run verify -s'",
         "pub": "npm run verify -s && npm publish --access public --tag",
-        "precommit": "npm run verify -s && gik-npm version patch -s"
+        "precommit": "npm run verify -s && gik-npm version patch -s && gik-npm docs"
     },
     "dependencies": {
         "@gik/tools-checker": "0.0.11",
@@ -41,5 +41,13 @@
     "devDependencies": {
         "@gik/eslint-config-node": "0.0.5",
         "@gik/npm": "^0.1.13"
+    },
+    "@gik/npm": {
+        "babel": {
+            "comments": true
+        },
+        "jsdoc": {
+            "files": "./lib/**/*.js"
+        }
     }
 }
