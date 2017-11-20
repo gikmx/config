@@ -1,0 +1,4 @@
+{
+    "path": "${Path.DELME}",
+    "env": "${Env}"
+}

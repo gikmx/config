@@ -1,4 +1,4 @@
-# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.3*
+# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.4*
 > Imports configuration from a folder
 
 ##### Contributors
@@ -20,7 +20,7 @@ Load data from json (compatible) files according to current environment.
 when no environment is specified `development` is assumed.
 
 As an added bonus, the contents of `Path` and `Env` will be available to you when
-populating the configuration. Just use the properties `path` and `env` respectively.
+populating the configuration.
 
 ###### Example
 
@@ -28,13 +28,32 @@ Assuming the following directory structure and `process.env.NODE_ENV = 'producti
 
 ```
  └ etc
-    ├ default.json -> { "a": { "a1":"one", "a2":"two" , "aa": "${a.a1}${a.a2}"} }
-    └ default-production.json -> { "a": { "ab": "${a.aa}-b" }, "b": true }
+    ├ default.json -> {
+    |    "a": {
+    |        "a1": "one",
+    |        "a2": "two",
+    |        "aa": "${a.a1}${a.a2}"
+    |    }
+    | }
+    └ default-production.json -> {
+          "a": {
+              "ab": "${a.aa}-b"
+          },
+          "b": "${Env}"
+      }
 ```
 The result would be:
 
 ```js
-{ a: { a1: 'one', a2: 'two', aa: 'onetwo', ab: 'onetwo-b' }, b: true }
+{
+    a: {
+        a1: 'one',
+        a2: 'two',
+        aa: 'onetwo',
+        ab: 'onetwo-b'
+    },
+    b: 'development'
+}
 ```
 
 ###### Parameters

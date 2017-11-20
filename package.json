@@ -1,6 +1,6 @@
 {
     "name": "@gik/tools-configurator",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Imports configuration from a folder",
     "license": "MIT",
     "contributors": [

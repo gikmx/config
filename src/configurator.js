@@ -79,7 +79,7 @@ export function Load(config, base) {
     let result;
     try {
         result = require(filename);
-        result = { path: Path, env: Env, ...DeepMerge.all([config, result]) };
+        result = { Path, Env, ...DeepMerge.all([config, result]) };
         result = Populator(result);
     } catch (error) {
         const message = [ParseError.message, base, error.message];
@@ -94,7 +94,7 @@ export function Load(config, base) {
  * when no environment is specified `development` is assumed.
  *
  * As an added bonus, the contents of `Path` and `Env` will be available to you when
- * populating the configuration. Just use the properties `path` and `env` respectively.
+ * populating the configuration.
  *
  * ###### Example
  *
@@ -102,13 +102,32 @@ export function Load(config, base) {
  *
  * ```
  *  └ etc
- *     ├ default.json -> { "a": { "a1":"one", "a2":"two" , "aa": "${a.a1}${a.a2}"} }
- *     └ default-production.json -> { "a": { "ab": "${a.aa}-b" }, "b": true }
+ *     ├ default.json -> {
+ *     |    "a": {
+ *     |        "a1": "one",
+ *     |        "a2": "two",
+ *     |        "aa": "${a.a1}${a.a2}"
+ *     |    }
+ *     | }
+ *     └ default-production.json -> {
+ *           "a": {
+ *               "ab": "${a.aa}-b"
+ *           },
+ *           "b": "${Env}"
+ *       }
  * ```
  * The result would be:
  *
  * ```js
- * { a: { a1: 'one', a2: 'two', aa: 'onetwo', ab: 'onetwo-b' }, b: true }
+ * {
+ *     a: {
+ *         a1: 'one',
+ *         a2: 'two',
+ *         aa: 'onetwo',
+ *         ab: 'onetwo-b'
+ *     },
+ *     b: 'development'
+ * }
  * ```
  * @param {Object} [settings] - Settings to customize behaviour.
  * @param {string} [settings.name=default] - The name for the config files.
@@ -134,7 +153,10 @@ export function Configurator(settings = {}) {
         const message = [SettingsPathError.message, path];
         Thrower(message, SettingsPathError.name);
     }
-    return [name, `${name}-${Env}`].reduce(Load.bind({ path, ext }), {});
+    const config = [name, `${name}-${Env}`].reduce(Load.bind({ path, ext }), {});
+    delete config.Env;
+    delete config.Path;
+    return config;
 }
 
 export default Configurator;

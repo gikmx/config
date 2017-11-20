@@ -101,8 +101,9 @@ describe('The exposed Configurator method', () => {
                 SettingsTypeError.message,
                 [`.${name}`, typeof valid, typeof invalid],
             ));
+        } finally {
+            jest.resetModules();
         }
-        jest.resetModules();
     }));
 
     test('should throw when prop path is not found', () => {
@@ -114,8 +115,9 @@ describe('The exposed Configurator method', () => {
         } catch (error) {
             expect(error.name).toBe(SettingsPathError.name);
             expect(error.message).toBe(Replacer(SettingsPathError.message, [path]));
+        } finally {
+            jest.resetModules();
         }
-        jest.resetModules();
     });
 
     test('should throw when base file is not found', () => {
@@ -131,8 +133,9 @@ describe('The exposed Configurator method', () => {
                 FileError.message,
                 [settings.name, PATH.join(path, settings.name + settings.ext)],
             ));
+        } finally {
+            jest.resetModules();
         }
-        jest.resetModules();
     });
 
     test('should throw when file is not valid', () => {
@@ -148,8 +151,9 @@ describe('The exposed Configurator method', () => {
                 ParseError.message,
                 [settings.name, 'Unexpected end of JSON input'],
             ));
+        } finally {
+            jest.resetModules();
         }
-        jest.resetModules();
     });
 
     test('should throw when environment file is not found', () => {
@@ -189,9 +193,10 @@ describe('The exposed Configurator method', () => {
                 ParseError.message,
                 [base, 'Unexpected end of JSON input'],
             ));
+        } finally {
+            process.env.NODE_ENV = env;
+            jest.resetModules();
         }
-        process.env.NODE_ENV = env;
-        jest.resetModules();
     });
 
     test('should resolve the example', () => {
@@ -200,15 +205,27 @@ describe('The exposed Configurator method', () => {
         const { Configurator } = require(pathMain);
         const path = PATH.join(pathCases, 'valid');
         const config = Configurator({ ...settingsValid, path });
-        delete config.env;
-        delete config.path;
+        jest.resetModules();
+        process.env.NODE_ENV = env;
         expect(config).toEqual({
             a: {
                 a1: 'one', a2: 'two', aa: 'onetwo', ab: 'onetwo-b',
             },
             b: true,
         });
-        process.env.NODE_ENV = env;
-        jest.resetModules();
     });
+
+    test('should have available the Path and Env properties', () => {
+        const path = PATH.join(pathCases, '05');
+        const env = process.env.NODE_ENV;
+        process.env.npm_package_directories_DELME = path;
+        process.env.NODE_ENV = 'RESETME';
+        const { Configurator } = require(pathMain);
+        const config = Configurator({ ...settingsValid, path });
+        jest.resetModules();
+        delete process.env.npm_package_directories_DELME;
+        process.env.NODE_ENV = env;
+        expect(config).toEqual({ path, env: 'RESETME' });
+    });
+
 });
