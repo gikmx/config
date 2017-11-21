@@ -96,10 +96,11 @@ describe('The exposed Configurator method', () => {
         try {
             Configurator({ ...settings, [name]: invalid });
         } catch (error) {
+            const type = name === 'name' ? 'string|Array' : typeof valid;
             expect(error.name).toBe(SettingsTypeError.name);
             expect(error.message).toBe(Replacer(
                 SettingsTypeError.message,
-                [`.${name}`, typeof valid, typeof invalid],
+                [`.${name}`, type, typeof invalid],
             ));
         } finally {
             jest.resetModules();

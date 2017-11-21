@@ -47,6 +47,7 @@ export const Settings = {
     name: 'default',
     ext: '.json',
     path: Path.etc,
+    delete: true,
 };
 
 /**
@@ -130,9 +131,11 @@ export function Load(config, base) {
  * }
  * ```
  * @param {Object} [settings] - Settings to customize behaviour.
- * @param {string} [settings.name=default] - The name for the config files.
+ * @param {string|Array} [settings.name=default] - The name for the config files.
+ * if an array is sent, will process specified names in order.
  * @param {string} [settings.path=Path.etc] - The path where config files are located.
  * @param {string} [settings.ext=.json] - The extension filter for config files.
+ * @param {boolean} [settings.delete=true] - Remove `Path` and `Env` after merging.
  * @returns {Object} - The result of the merge of the common and environment file.
  * @throws {ConfiguratorSettingsTypeError} - When sent an invalid settings parameter.
  * @throws {ConfiguratorSettingsPathError} - When settings.path cannot be found.
@@ -146,14 +149,17 @@ export function Configurator(settings = {}) {
     }
     const { name, path, ext } = Object.assign({}, Settings, settings);
     const { message: emsg, name: enam } = SettingsTypeError;
-    if (!Is.string(name)) Thrower([emsg, '.name', 'string', typeof name], enam);
     if (!Is.string(ext)) Thrower([emsg, '.ext', 'string', typeof ext], enam);
     if (!Is.string(path)) Thrower([emsg, '.path', 'string', typeof path], enam);
+    if (!Is.string(name) && !Is.array(name))
+        Thrower([emsg, '.name', 'string|Array', typeof name], enam);
     if (!Exists(path, 'directory')) {
         const message = [SettingsPathError.message, path];
         Thrower(message, SettingsPathError.name);
     }
-    const config = [name, `${name}-${Env}`].reduce(Load.bind({ path, ext }), {});
+    const config = (Is.string(name) ? [name] : name)
+        .reduce((acc, target) => acc.concat([target, `${target}-${Env}`]), [])
+        .reduce(Load.bind({ path, ext }), {});
     delete config.Env;
     delete config.Path;
     return config;

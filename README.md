@@ -1,4 +1,4 @@
-# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.4*
+# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.5*
 > Imports configuration from a folder
 
 ##### Contributors
@@ -71,9 +71,11 @@ The result would be:
             <code>[settings.name]</code>
         </td>
         <td style="white-space: nowrap;">
-                <a href="#string">string</a>
+                <a href="#string">string</a> | 
+                <a href="#Array">Array</a>
         </td>
-        <td>The name for the config files. <b>Default <code>default</code></b></td>
+        <td>The name for the config files.
+if an array is sent, will process specified names in order. <b>Default <code>default</code></b></td>
     </tr><tr>
         <td style="white-space: nowrap;">
             <code>[settings.path]</code>
@@ -90,6 +92,14 @@ The result would be:
                 <a href="#string">string</a>
         </td>
         <td>The extension filter for config files. <b>Default <code>.json</code></b></td>
+    </tr><tr>
+        <td style="white-space: nowrap;">
+            <code>[settings.delete]</code>
+        </td>
+        <td style="white-space: nowrap;">
+                <a href="#boolean">boolean</a>
+        </td>
+        <td>Remove <code>Path</code> and <code>Env</code> after merging. <b>Default <code>true</code></b></td>
     </tr>
 </table>
 
