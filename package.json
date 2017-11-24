@@ -1,6 +1,6 @@
 {
     "name": "@gik/tools-configurator",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Imports configuration from a folder",
     "license": "MIT",
     "contributors": [
@@ -36,7 +36,8 @@
         "@gik/tools-checker": "0.0.11",
         "@gik/tools-populator": "0.0.5",
         "@gik/tools-thrower": "^0.1.12",
-        "deepmerge": "^2.0.1"
+        "deepmerge": "^2.0.1",
+        "tmp": "0.0.33"
     },
     "devDependencies": {
         "@gik/eslint-config-node": "0.0.5",

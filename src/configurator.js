@@ -3,6 +3,7 @@ import PATH from 'path';
 import DeepMerge from 'deepmerge';
 import Populator from '@gik/tools-populator';
 import Thrower from '@gik/tools-thrower';
+import Tmp from 'tmp';
 import { Is } from '@gik/tools-checker';
 import {
     ConfiguratorPathError as PathError,
@@ -19,7 +20,7 @@ import {
  * @param {string} type - Either `directory` or `file`.
  * @returns {boolean} - Whether if the target corresponds to file.
  */
-export function Exists(path, type) {
+function Exists(path, type) {
     const name = `is${type[0].toUpperCase()}${type.slice(1)}`;
     return FS.existsSync(path) && FS.statSync(path)[name]();
 }
@@ -70,7 +71,7 @@ export const Env = (NODE_ENV === 'undefined' || NODE_ENV === '')
  * @property {string} this.ext - The extension specified on settings.
  * @returns {Object} - The result of the merge.
  */
-export function Load(config, base) {
+function Load(config, base) {
     const { path, ext } = this;
     const filename = PATH.join(path, base + ext);
     if (!Exists(filename, 'file')) {
@@ -88,7 +89,6 @@ export function Load(config, base) {
     }
     return result;
 }
-
 /**
  * @module configurator
  * @description Load data from json (compatible) files according to current environment.
@@ -163,6 +163,50 @@ export function Configurator(settings = {}) {
     delete config.Env;
     delete config.Path;
     return config;
+}
+
+/**
+ * @module WebpackResolverPlugin
+ * @memberof configurator
+ * @description Allows to implement the same functionality of `configurator`
+ * to generate a module that will be internally resolved by webpack.
+ *
+ * ###### Example
+ * Adding the following to your webpack config:
+ *
+ * ```js
+ * { ...
+ *   resolve: {
+ *     plugins: [ WebpackResolverPlugin('#config', { path: './config' }) ]
+ *   }
+ * }
+ * ```
+ *
+ * Would make the configuration available on a module, like the following:
+ *
+ * ```js
+ * // your webpack source
+ * import Config from '#config';
+ * console.log(Config); // would output the parsed config on `./config`
+ * ```
+ *
+ * @param {string} id - The identifier that you'll use to import the module.
+ * @param {Object} settings - The settings to be passed to the `configurator`.
+ */
+export function WebpackResolverPlugin(id, settings) {
+    // Create a temporay file with the module contents
+    Tmp.setGracefulCleanup(); // deletes file even after uncaught exceptions.
+    const path = Tmp.fileSync({ prefix: 'configurator-', postfix: '.json' }).name;
+    FS.writeFileSync(path, JSON.stringify(Configurator(settings)), 'utf8');
+    // return the plugin that will consume the tmpFile.
+    return {
+        apply(compiler) {
+            compiler.plugin('described-resolve', function ModuleResolver(req, cbak) {
+                if (req.request !== id) return cbak();
+                this.doResolve('resolve', { ...req, request: path }, null, cbak);
+            });
+        },
+    };
 }
 
 export default Configurator;

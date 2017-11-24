@@ -1,4 +1,4 @@
-# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.5*
+# [@gik/tools-configurator](https://github.com/gikmx/config#readme) *0.0.6*
 > Imports configuration from a folder
 
 ##### Contributors
@@ -12,6 +12,7 @@
 - **[configurator](#configurator)** Load data from json (compatible) files according to current environment.
   - **[Path](#configurator.Path)** Returns full paths for the directories declard con package.json
   - **[Env](#configurator.Env)** Returns the current environment.
+  - **[WebpackResolverPlugin](#configurator.WebpackResolverPlugin)** Allows to implement the same functionality of `configurator`
 
 
 # <a name="configurator"></a> configurator
@@ -116,6 +117,7 @@ if an array is sent, will process specified names in order. <b>Default <code>def
 
 - [Path](#configurator.Path)
 - [Env](#configurator.Env)
+- [WebpackResolverPlugin](#configurator.WebpackResolverPlugin)
 
 <small>**[▲ Top](#table-of-contents)**</small>
 
@@ -134,6 +136,57 @@ Returns full paths for the directories declard con package.json
 ## <a name="configurator.Env"></a> Env
 
 Returns the current environment.
+
+
+
+<small>**[▲ Top](#table-of-contents)**</small>
+
+---
+
+## <a name="configurator.WebpackResolverPlugin"></a> WebpackResolverPlugin
+
+Allows to implement the same functionality of `configurator`
+to generate a module that will be internally resolved by webpack.
+
+###### Example
+Adding the following to your webpack config:
+
+```js
+{ ...
+  resolve: {
+    plugins: [ WebpackResolverPlugin('#config', { path: './config' }) ]
+  }
+}
+```
+
+Would make the configuration available on a module, like the following:
+
+```js
+// your webpack source
+import Config from '#config';
+console.log(Config); // would output the parsed config on `./config`
+```
+
+###### Parameters
+<table>
+    <tr>
+        <td style="white-space: nowrap;">
+            <code>id</code>
+        </td>
+        <td style="white-space: nowrap;">
+                <a href="#string">string</a>
+        </td>
+        <td>The identifier that you&#39;ll use to import the module.</td>
+    </tr><tr>
+        <td style="white-space: nowrap;">
+            <code>settings</code>
+        </td>
+        <td style="white-space: nowrap;">
+                <a href="#Object">Object</a>
+        </td>
+        <td>The settings to be passed to the <code>configurator</code>.</td>
+    </tr>
+</table>
 
 
 
